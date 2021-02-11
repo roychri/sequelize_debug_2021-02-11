@@ -1,14 +1,14 @@
 version: '2.1'
 services:
-  postgres:
-    image: postgres:9.6-alpine
+  mariadb:
+    image: mariadb:10.5
     restart: always
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
     healthcheck:
-      test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}" ]
+      test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$${MYSQL_ROOT_PASSWORD} 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
   node:
     build:
       context: .
@@ -16,13 +16,13 @@ services:
       args:
         NODE_ENV: development
     depends_on:
-      postgres:
+      mariadb:
         condition: service_healthy
     environment:
-      - POSTGRES_DB=${DB_NAME}
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASS}
-      - POSTGRES_HOST=postgres
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_HOST=mariadb
     ports:
       - "${NODE_PORT}:3000"
     volumes:

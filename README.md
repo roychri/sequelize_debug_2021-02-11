@@ -1,4 +1,6 @@
 
+This repo exists to test and explain the problem when using MariaDB and a JSON field when excluding the json field from the list of attributes while using association include.
+
 # Instructions
 
 In order to use this repo, please follow these instructions.
@@ -7,8 +9,8 @@ In order to use this repo, please follow these instructions.
 
 ```
 DB_NAME=test
-DB_USER=postgres
-DB_PASS=postgres
+DB_USER=root
+DB_PASS=root
 NODE_PORT=8787
 ```
 
@@ -29,7 +31,9 @@ curl localhost:8787/test
 
 You should see `Found 2 sites.` as output of the last request if all works as expected.
 
-Feel free to update the code (the app will reload your code change automatically) and test again until you can break it.
+But MariaDB does not work as expected. It will return `Found 0 sites`.
+
+Try uncommenting the line to add `someJsonValue` to the list of attributes and you will see that it returns 2 sites when runing the site.
 
 Once you finish testing, shutdown the app.
 

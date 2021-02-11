@@ -6,12 +6,12 @@ const port = 3000;
 const { Sequelize, DataTypes, Op } = require( 'sequelize' );
 
 const {
-    POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_DB
+    MYSQL_USER, MYSQL_ROOT_PASSWORD, MYSQL_HOST, MYSQL_DATABASE
 } = process.env;
 
-const sequelize = new Sequelize( POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD, {
-    host: POSTGRES_HOST,
-    dialect: 'postgres'
+const sequelize = new Sequelize( MYSQL_DATABASE, MYSQL_USER, MYSQL_ROOT_PASSWORD, {
+    host: MYSQL_HOST,
+    dialect: 'mariadb'
 });
 
 const codeLength = 32;
@@ -53,11 +53,9 @@ app.get( '/seed', async ( req, res ) => {
     try {
         const site = await Site.create({
             code: Date.now().toString(),
-            someJsonValue: {
-                date: new Date(),
-                timestamp: Date.now(),
-                test: true
-            }
+            someJsonValue: JSON.stringify({
+                timestamp: Date.now()
+            })
         });
         await site.createPage({});
         res.send( `Created record ${site.id}\n` );
@@ -68,20 +66,17 @@ app.get( '/seed', async ( req, res ) => {
 
 app.get( '/test', async ( req, res ) => {
     try {
-        const where = {
-            code: {
-                [Op.ne]: '1234'
-            },
-            'someJsonValue.test': true
-        };
-        const attributes = [ 'id', 'code' ];
+        const attributes = [
+            'id', 'code',
+            //'someJsonValue'
+        ];
         const include = [
             {
                 model: Page,
                 require: true
             }
         ];
-        const sites = await Site.findAll({ where, include, attributes });
+        const sites = await Site.findAll({ include, attributes });
         res.send( `Found ${sites.length} sites.\n` );
     } catch ( err ) {
         res.send( err.stack + "\n" );
