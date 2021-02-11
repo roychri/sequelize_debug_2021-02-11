@@ -1,7 +1,9 @@
 
+= Instructions
+
 In order to use this repo, please follow these instructions.
 
-1. Create a file called `.env` and put the following information in it
+=== 1. Create a file called `.env` and put the following information in it
 
 ```
 DB_NAME=test
@@ -10,14 +12,14 @@ DB_PASS=postgres
 NODE_PORT=8787
 ```
 
-2. Start the application using `docker-compose` in one terminal
+=== 2. Start the application using `docker-compose` in one terminal
 
 ```
 docker-compose up
 ```
 
 
-3. Test the application in another terminal
+=== 3. Test the application in another terminal
 
 ```
 curl localhost:8787/seed
@@ -31,7 +33,7 @@ Feel free to update the code (the app will reload your code change automatically
 
 Once you finish testing, shutdown the app.
 
-4. Shutdown the app
+=== 4. Shutdown the app
 
 Hit CTRL-C in the first terminal running `docker-compose up` to stop it.
 Then shutdown the app using:
