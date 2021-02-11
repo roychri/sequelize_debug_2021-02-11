@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+  postgres:
+    image: postgres:9.6-alpine
+    restart: always
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${DB_NAME}" ]
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: development
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_HOST=postgres
+    ports:
+      - "${NODE_PORT}:3000"
+    volumes:
+      - ./:/app/
+      - /app/node_modules/
+    working_dir: /app
+    command: [ "npm", "run", "start" ]

@@ -1,0 +1,23 @@
+{
+    "name": "sequelize_debug_2021-02-11",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon src/index.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "pg": "^8.5.1",
+        "sequelize": "^6.5.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.19.0",
+        "nodemon": "^2.0.7"
+    }
+}
